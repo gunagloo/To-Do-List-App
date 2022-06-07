@@ -71,10 +71,14 @@ export default function App() {
           name="Notes"
           component={NotesScreen}
           options={{
-            title: "Todo or Notes App IDK",
+            title: "To Do List",
             headerTitleStyle: {
               fontWeight: "bold",
               fontSize: 24,
+              backgroundColor: 'cyan',
+              borderRadius: 10,
+              borderWidth: 2,
+              padding: 10,
             },
             headerStyle: {
               backgroundColor: "orange",
