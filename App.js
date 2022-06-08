@@ -1,103 +1,25 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, FlatList } from "react-native";
+import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { Entypo } from "@expo/vector-icons";
 import * as SQLite from "expo-sqlite";
+import NotesStack from "./screens/NotesStack";
+import AddScreen from "./screens/AddScreen";
 
 const db = SQLite.openDatabase("notes.db");
-
-function NotesScreen({ navigation }) {
-  // Create state variable for our notes
-  const [notes, setNotes] = useState([
-    { title: "Walk the dog", done: false, id: "0" },
-    { title: "Water the plants", done: false, id: "" },
-  ]);
-
-  function addNote() {
-    let newNote = {
-      title: "Sample new note",
-      done: false,
-      id: notes.length.toString(),
-    };
-    setNotes([...notes, newNote]);
-  }
-
-  // This adds the new note button in the header
-  useEffect(() => {
-    console.log("This effect happened!!!!");
-    navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity onPress={addNote}>
-          <Entypo
-            name="new-message"
-            size={24}
-            color="black"
-            style={{ marginRight: 16 }}
-          />
-        </TouchableOpacity>
-      ),
-    });
-  });
-
-  function renderItem({ item }) {
-    return (
-      <View
-        style={{ padding: 10, borderBottomColor: "#ccc", borderBottomWidth: 1 }}
-      >
-        <Text style={{ fontSize: 16 }}>{item.title}</Text>
-      </View>
-    );
-  }
-
-  return (
-    <View style={styles.container}>
-      <FlatList
-        data={notes}
-        renderItem={renderItem}
-        style={{ width: "100%" }}
-      />
-    </View>
-  );
-}
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator mode="modal" headerMode="none">
         <Stack.Screen
-          name="Notes"
-          component={NotesScreen}
-          options={{
-            title: "To Do List",
-            headerTitleStyle: {
-              fontWeight: "bold",
-              fontSize: 24,
-              backgroundColor: 'cyan',
-              borderRadius: 10,
-              borderWidth: 2,
-              padding: 10,
-            },
-            headerStyle: {
-              backgroundColor: "orange",
-              height: 120,
-              borderBottomColor: "#999",
-              borderBottomWidth: 2,
-            },
-          }}
+          name="Notes Stack"
+          component={NotesStack}
+          options={{ headerShown: false }}
         />
+        <Stack.Screen name="Add Note" component={AddScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#ffc",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
